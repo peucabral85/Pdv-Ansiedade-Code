@@ -189,7 +189,7 @@ Critérios de aceite:
 <summary><b>Efetuar deploy da aplicação</b></summary>
 <br>
 
-Fazer deploy do projeto no Heroku e disponibilizar a URL para o líder técnico.
+Fazer deploy do projeto e disponibilizar a URL para o líder técnico.
 
 </details>
 
