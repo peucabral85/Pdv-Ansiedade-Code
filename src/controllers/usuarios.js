@@ -1,12 +1,13 @@
-const knex = require("knex")
+const knex = require('../connections/conexao')
 const bcrypt = require("bcrypt")
+const jwt = require('jsonwebtoken')
 
 const logarUsuario = async (req, res) => {
     const {email, senha} = req.body
 
     try {
 
-    const usuarioEncontrado = await knex('usuarios').where({email})
+    const usuarioEncontrado = await knex('usuarios').where({email}).first()
 
     const senhaValida = await bcrypt.compare(senha, usuarioEncontrado.senha)
         if (!senhaValida) {
@@ -17,15 +18,20 @@ const logarUsuario = async (req, res) => {
 
     const {senha: _, ...dadosUsuario} = usuarioEncontrado
 
-    return res.status(200).json({
+    const usuario = {
         usuario: dadosUsuario,
         token
-    })
+    }
+
+    return res.status(200).json(usuario)
 
     } catch (error) {
-        return res.status(500).json({
-            messagem: "Erro interno no servidor"
-        })
+        return res.status(500).json(
+            error.message
+        )
     }
 }
-    module.exports = logarUsuario
+
+module.exports = {
+    logarUsuario
+}
