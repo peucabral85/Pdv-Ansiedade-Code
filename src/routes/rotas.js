@@ -1,10 +1,10 @@
 const express = require('express')
 const { validacaoCorpoLogin } = require('../middlewares/validarCorpoSchema')
-const autenticarLogin = require('../middlewares/autenticacaoLogin')
 const schemaLogin = require('../schemas/schemaLogin')
+const logarUsuario = require('../controllers/usuarios')
 
 
 const rotas = express()
 
 
-rotas.post('/login', validacaoCorpoLogin(schemaLogin), autenticarLogin)
+rotas.post('/login', validacaoCorpoLogin(schemaLogin), logarUsuario)
