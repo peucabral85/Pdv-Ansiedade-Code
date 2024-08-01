@@ -1,3 +1,5 @@
+const joi = require('joi');
+
 const schemaRedefinicaoSenha = joi.object({
     email: joi.string().required().email().messages({
         'any.required': 'O campo email é obrigatório.',
@@ -16,6 +18,11 @@ const schemaRedefinicaoSenha = joi.object({
         'string.empty': 'O campo senha_nova é obrigatório.',
         'string.base': 'Deve ser informado um conteúdo de texto para o campo senha_nova.'
     })
+}).custom((value, helpers) => {
+    if (value.senha_antiga === value.senha_nova) {
+        return helpers.message('A nova senha não pode ser igual à antiga.');
+    }
+    return value;
 });
 
 module.exports = {
