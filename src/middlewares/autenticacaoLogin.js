@@ -25,7 +25,7 @@
     
             next();
         } catch (error) {
-            return res.status(400).json(error.message);
+            return res.status(400).json({message: "Erro interno do servidor"});
         }
     }
     
