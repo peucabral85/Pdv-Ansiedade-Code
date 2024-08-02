@@ -1,4 +1,5 @@
 const express = require('express');
+const categorias = require('../controllers/categorias')
 
 
 
@@ -7,7 +8,7 @@ const rotas = express();
 
 
 
-rotas.get("/categoras")
+rotas.get("/categorias", categorias.listarCategoria)
 
 
 
