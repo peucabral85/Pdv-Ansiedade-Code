@@ -1,16 +1,14 @@
-const express = require('express')
+const express = require('express');
+const validarCorpoSchema = require('../middlewares/validarCorpoSchema');
+const { logarUsuario, redefinirSenhaUsuario } = require('../controllers/usuarios');
+const { schemaRedefinicaoSenha } = require('../schemas/schemaUsuarios');
+const { schemaLogin } = require('../schemas/schemaLogin');
+const { verificaLogin } = require('../middlewares/autenticacaoLogin');
 
-const validacaoCorpoLogin = require('../middlewares/validarCorpoSchema')
-const { logarUsuario, } = require('../controllers/usuarios')
-const { schemaLogin } = require('../schemas/schemaLogin')
-const { verificaLogin } = require('../middlewares/autenticacaoLogin')
+const rotas = express();
 
-
-
-const rotas = express()
-
-
-rotas.post('/login', validacaoCorpoLogin(schemaLogin), logarUsuario)
+rotas.post('/login', validacaoCorpoSchema(schemaLogin), logarUsuario);
+rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), redefinirSenhaUsuario);
 
 
-module.exports = rotas
+module.exports = rotas;

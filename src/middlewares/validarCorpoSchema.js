@@ -1,11 +1,11 @@
-const validacaoCorpoLogin = joiScheme => async(req, res, next) => {  
+const validarCorpoSchema = joiSchema => async (req, res, next) => {
     try {
-        await joiScheme.validateAsync(req.body)
-        next()
+        await joiSchema.validateAsync(req.body);
+        next();
+      
     } catch (error) {
-        res.status(500).json({mensagem: 'Erro interno no servidor'})
+        res.status(500).json({mensagem: 'Erro interno no servidor'});
     }
-       
-    }
+}
 
-    module.exports = validacaoCorpoLogin
+module.exports = validarCorpoSchema;
