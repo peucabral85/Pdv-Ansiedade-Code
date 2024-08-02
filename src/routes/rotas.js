@@ -8,3 +8,8 @@ const rotas = express();
 
 
 rotas.get("/categoras")
+
+
+
+
+module.exports = rotas;
