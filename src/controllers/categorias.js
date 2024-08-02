@@ -1,8 +1,9 @@
 const knex = require('../connections/conexao');
+const categorias = require('../services/categorias')
 
 const listarCategoria = async (req, res) => {
 
-    const exibirCategorias = await knex('categorias').debug()
+    const exibirCategorias = categorias.exibirCategorias;
 
     return res.json(exibirCategorias)
 
