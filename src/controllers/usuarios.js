@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const transportador = require('../utils/email');
+const compiladorHtml = require('../utils/compiladorHtml');
 const { verificarEmailExistente, updateSenhaUsuario } = require('../services/usuarios');
 
 const redefinirSenhaUsuario = async (req, res) => {
@@ -21,6 +23,20 @@ const redefinirSenhaUsuario = async (req, res) => {
         const senhaCriptografada = await bcrypt.hash(senha_nova, 10);
 
         await updateSenhaUsuario(usuarioValidado.id, senhaCriptografada);
+
+        const avisoSenhaEmail = await compiladorHtml("./src/templates/emailSenhaRedefinida.html",
+            {
+                nomeusuario: usuarioValidado.nome,
+                dataalteracao: `${new Date().toLocaleDateString()}, as ${new Date().toLocaleTimeString()}`
+            }
+        );
+
+        transportador.sendMail({
+            from: `${process.env.EMAIL_NAME} <${process.env.EMAIL_FROM}>`,
+            to: `${usuarioValidado.nome} <${usuarioValidado.email}>`,
+            subject: 'Alteração de senha',
+            html: avisoSenhaEmail
+        });
 
         return res.status(200).json({ mensagem: "Senha atualizada com sucesso." });
 
