@@ -13,10 +13,10 @@
             const { id } = jwt.verify(token, process.env.SENHA_JWT);
     
             const usuarioEncontrado = await knex('usuarios').where({id}).first()
-            console.log(usuarioEncontrado);
+            
 
             if (!usuarioEncontrado) {
-                return res.status(404).json('Usuario não encontrado');
+                return res.status(401).json({mensagem: "Acesso não autorizado."});
             }
     
             const { senha, ...usuario } = usuarioEncontrado;
@@ -25,7 +25,11 @@
     
             next();
         } catch (error) {
-            return res.status(400).json({message: "Erro interno do servidor"});
+             if (error.message === 'jwt expired' || error.message === 'invalid token' || error.message === 'invalid signature') {
+                return res.status(401).json({ mensagem: 'Autenticação falhou. Por favor, verifique as credenciais e tente novamente!' });
+             }
+
+             return res.status(500).json({ mensagem: 'Erro interno do servidor.' });
         }
     }
     

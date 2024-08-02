@@ -8,13 +8,15 @@ const logarUsuario = async (req, res) => {
     try {
 
     const usuarioEncontrado = await knex('usuarios').where({email}).first()
-
+if (!usuarioEncontrado) { 
+    return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." }); 
+}
     const senhaValida = await bcrypt.compare(senha, usuarioEncontrado.senha)
         if (!senhaValida) {
-            return res.status(400).json({messagem: 'Senha inválida'})
+            return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." })
         }
 
-    const token = jwt.sign({id: usuarioEncontrado.id}, process.env.SENHA_JWT, {expiresIn: '12h'})
+    const token = jwt.sign({id: usuarioEncontrado.id}, process.env.PASS_JWT, {expiresIn: '12h'})
 
     const {senha: _, ...dadosUsuario} = usuarioEncontrado
 
@@ -27,7 +29,7 @@ const logarUsuario = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json(
-            error.message
+            {mensagem: "Erro interno do servidor."}
         )
     }
 }
