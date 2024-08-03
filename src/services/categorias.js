@@ -1,12 +1,11 @@
 const knex = require('../connections/conexao');
 
-const exibirCategoria = async (tabela) => {
-    const exibirCategorias = await knex(tabela);
+const exibirCategorias = async (tabela) => {
+    const categoriasListadas = await knex(tabela);
 
-    return exibirCategorias;
+    return categoriasListadas;
 }
 
-
 module.exports = {
-    exibirCategoria
+    exibirCategorias
 }
