@@ -4,10 +4,6 @@ const knex = require('../connections/conexao');
 const cadastrarUsuario = async (req, res) => {
 
     const { nome, email, senha } = req.body;
- 
-    if (!nome || !email || !senha) {
-        return res.status(400).json({ erro: 'Todos os campos são obrigatórios' });
-    }
     try {
         const emailJaCadastrado = await knex('usuarios').where({email}).first()
         if (emailJaCadastrado) {
