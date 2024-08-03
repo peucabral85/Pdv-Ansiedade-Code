@@ -9,7 +9,7 @@ const { verificaLogin } = require('../middlewares/autenticacaoLogin');
 const rotas = express();
 
 rotas.get('/categoria', categorias.listarCategoria);
-rotas.post('/login', validacaoCorpoSchema(schemaLogin), usuarios.logarUsuario);
+rotas.post('/login', validarCorpoSchema(schemaLogin), usuarios.logarUsuario);
 rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), usuarios.redefinirSenhaUsuario);
 
 module.exports = rotas;
