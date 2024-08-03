@@ -1,9 +1,30 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');  
 const jwt = require('jsonwebtoken');
 const knex = require('../connections/conexao');
 const transportador = require('../utils/email');
 const compiladorHtml = require('../utils/compiladorHtml');
 const { verificarEmailExistente, updateSenhaUsuario } = require('../services/usuarios');
+
+const cadastrarUsuario = async (req, res) => {
+
+    const { nome, email, senha } = req.body;
+    try {
+        const emailJaCadastrado = await knex('usuarios').where({email}).first();
+        
+        if (emailJaCadastrado) {
+            return res.status(400).json({erro: 'Email já cadastrado'});
+        }
+      
+        const senhaHasheada = await bcrypt.hash(senha, 10);
+        
+        const usuario = await knex('usuarios').insert({nome, email, senha: senhaHasheada}).returning('*');
+        
+        return res.status(201).json(usuario);
+      
+        } catch(error) {
+            res.status(500).json({mensagem: "Erro interno do servidor."});
+    }
+}
 
 const logarUsuario = async (req, res) => {
     const {email, senha} = req.body;
@@ -81,6 +102,7 @@ const redefinirSenhaUsuario = async (req, res) => {
 }
 
 module.exports = {
+  cadastrarUsuario,
   logarUsuario,
   redefinirSenhaUsuario
 }

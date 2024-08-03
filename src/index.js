@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const rotas = require('./routes/rotas')
+const rotas = require('./routes/rotas');
 
 const app = express();
 
