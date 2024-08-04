@@ -10,7 +10,7 @@
         try {
             const token = authorization.replace('Bearer ', '').trim();
     
-            const { id } = jwt.verify(token, process.env.SENHA_JWT);
+            const { id } = jwt.verify(token, process.env.PASS_JWT);
     
             const usuarioEncontrado = await knex('usuarios').where({id}).first()
             
@@ -27,7 +27,7 @@
         } catch (error) {
              if (error.message === 'jwt expired' || error.message === 'invalid token' || error.message === 'invalid signature') {
                 return res.status(401).json({ mensagem: 'Autenticação falhou. Por favor, verifique as credenciais e tente novamente!' });
-             }
+             }             
 
              return res.status(500).json({ mensagem: 'Erro interno do servidor.' });
         }
