@@ -9,6 +9,27 @@ const {
   atualizarUsuarioService,
 } = require("../services/usuarios");
 
+const cadastrarUsuario = async (req, res) => {
+
+    const { nome, email, senha } = req.body;
+    try {
+        const emailJaCadastrado = await knex('usuarios').where({email}).first();
+        
+        if (emailJaCadastrado) {
+            return res.status(400).json({erro: 'Email já cadastrado'});
+        }
+      
+        const senhaHasheada = await bcrypt.hash(senha, 10);
+        
+        const usuario = await knex('usuarios').insert({nome, email, senha: senhaHasheada}).returning('*');
+        
+        return res.status(201).json(usuario);
+      
+        } catch(error) {
+            res.status(500).json({mensagem: "Erro interno do servidor."});
+    }
+}
+
 const logarUsuario = async (req, res) => {
   const { email, senha } = req.body;
 
@@ -16,26 +37,16 @@ const logarUsuario = async (req, res) => {
     const usuarioValidado = await knex("usuarios").where({ email }).first();
 
     if (!usuarioValidado) {
-      return res
-        .status(401)
-        .json({ mensagem: "Usuário e/ou senha inválido(s)." });
+      return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." });
     }
 
-    // const senhaValidada = await bcrypt.compare(senha, usuarioValidado.senha);
+    const senhaValidada = await bcrypt.compare(senha, usuarioValidado.senha);
 
-    // if (!senhaValidada) {
-    //     return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." });
-    // }
-
-    if (senha !== usuarioValidado.senha) {
-      return res
-        .status(401)
-        .json({ mensagem: "Usuário e/ou senha inválido(s)." });
+    if (!senhaValidada) {
+      return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." });
     }
 
-    const token = jwt.sign({ id: usuarioValidado.id }, process.env.PASS_JWT, {
-      expiresIn: "12h",
-    });
+    const token = jwt.sign({ id: usuarioValidado.id }, process.env.PASS_JWT, { expiresIn: "12h" });
 
     const { senha: _, ...dadosUsuario } = usuarioValidado;
 
@@ -45,11 +56,11 @@ const logarUsuario = async (req, res) => {
     };
 
     return res.status(200).json(usuario);
+    
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+      return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
-};
+}
 
 const redefinirSenhaUsuario = async (req, res) => {
   const { email, senha_antiga, senha_nova } = req.body;
@@ -58,28 +69,20 @@ const redefinirSenhaUsuario = async (req, res) => {
     const usuarioValidado = await verificarEmailExistente(email);
 
     if (!usuarioValidado) {
-      return res
-        .status(401)
-        .json({ mensagem: "Usuário e/ou senha inválido(s)." });
+      return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." });
     }
 
-    const senhaValidada = await bcrypt.compare(
-      senha_antiga,
-      usuarioValidado.senha
-    );
+    const senhaValidada = await bcrypt.compare(senha_antiga, usuarioValidado.senha);
 
     if (!senhaValidada) {
-      return res
-        .status(401)
-        .json({ mensagem: "Usuário e/ou senha inválido(s)." });
+      return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." });
     }
 
     const senhaCriptografada = await bcrypt.hash(senha_nova, 10);
 
     await updateSenhaUsuario(usuarioValidado.id, senhaCriptografada);
 
-    const avisoSenhaEmail = await compiladorHtml(
-      "./src/templates/emailSenhaRedefinida.html",
+    const avisoSenhaEmail = await compiladorHtml("./src/templates/emailSenhaRedefinida.html",
       {
         nomeusuario: usuarioValidado.nome,
         dataalteracao: `${new Date().toLocaleDateString()}, as ${new Date().toLocaleTimeString()}`,
@@ -94,27 +97,28 @@ const redefinirSenhaUsuario = async (req, res) => {
     });
 
     return res.status(200).json({ mensagem: "Senha atualizada com sucesso." });
+    
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
-};
+}
 
 const detalharUsuario = async (req, res) => {
   const { usuario } = req;
 
   try {
-    return res.json(usuario);
+    return res.status(200).json(usuario);
+    
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
-};
+}
 
 const atualizarUsuario = async (req, res) => {
   const { nome, email } = req.body;
   const { usuario } = req;
 
   try {
-    //await atualizarUsuarioService({ usuario, nome, email });
 
     const usuarioExiste = await knex("usuarios").where({ id: usuario.id });
 
@@ -126,21 +130,23 @@ const atualizarUsuario = async (req, res) => {
       const emailUsuarioExiste = await verificarEmailExistente(email);
 
       if (emailUsuarioExiste) {
-        return res.status(400).json({ mensagem: "O email já existe" });
+        return res.status(409).json({ mensagem: "O email já existe" });
       }
     }
 
     await knex("usuarios").update({ nome, email }).where({ id: usuario.id });
 
-    return res.status(204).send();
+    return res.status(200).json({mensagem: "Usuário atualizado com sucesso."});
+    
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
 module.exports = {
+  cadastrarUsuario,
   logarUsuario,
   redefinirSenhaUsuario,
   detalharUsuario,
-  atualizarUsuario,
-};
+  atualizarUsuario
+}
