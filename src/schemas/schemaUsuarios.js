@@ -44,7 +44,21 @@ const schemaRedefinicaoSenha = joi.object({
     return value;
 });
 
+const schemaAtualizarUsuario = joi.object({
+    nome: joi.string().required().messages({
+        'any.required': 'O campo nome é obrigatório.',
+        'string.empty': 'O campo nome é obrigatório.',
+    }),
+  
+    email: joi.string().required().email().messages({
+        'any.required': 'O campo email é obrigatório.',
+        'string.empty': 'O campo email é obrigatório.',
+        'string.email': 'Informe um email com formato válido.'
+    })
+});
+
 module.exports = {
     schemaCadastroUsuario,
-    schemaRedefinicaoSenha
+    schemaRedefinicaoSenha,
+    schemaAtualizarUsuario
 }
