@@ -2,20 +2,20 @@ const joi = require('joi');
 
 const schemaCadastroUsuario = joi.object({
     nome: joi.string().required().messages({
-        'any.required':'O campo nome é obrigatório.', 
-        'string.empty':'O campo nome é obrigatório.'
+        'any.required': 'O campo nome é obrigatório.',
+        'string.empty': 'O campo nome é obrigatório.'
     }),
-  
+
     email: joi.string().email().required().messages({
-      'any.required':'O campo email é obrigatório.', 
-      'string.empty':'O campo email é obrigatório.', 
-      'string.email':'Informe um email com formato válido.'
+        'any.required': 'O campo email é obrigatório.',
+        'string.empty': 'O campo email é obrigatório.',
+        'string.email': 'Informe um email com formato válido.'
     }),
-  
+
     senha: joi.string().required().messages({
-      'any.required':'O campo senha é obrigatório.', 
-      'string.empty':'O campo senha é obrigatório.',
-      'string.base': 'Deve ser informado um conteúdo de texto para o campo senha.'
+        'any.required': 'O campo senha é obrigatório.',
+        'string.empty': 'O campo senha é obrigatório.',
+        'string.base': 'Deve ser informado um conteúdo de texto para o campo senha.'
     }),
 });
 
@@ -49,7 +49,7 @@ const schemaAtualizarUsuario = joi.object({
         'any.required': 'O campo nome é obrigatório.',
         'string.empty': 'O campo nome é obrigatório.',
     }),
-  
+
     email: joi.string().required().email().messages({
         'any.required': 'O campo email é obrigatório.',
         'string.empty': 'O campo email é obrigatório.',

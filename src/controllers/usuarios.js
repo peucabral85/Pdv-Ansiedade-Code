@@ -16,7 +16,7 @@ const cadastrarUsuario = async (req, res) => {
     const emailJaCadastrado = await verificarEmailExistente(email);
 
     if (emailJaCadastrado) {
-      return res.status(400).json({ mensagem: 'Email já cadastrado.' });
+      return res.status(409).json({ mensagem: "Já existe usuário cadastrado com o e-mail informado." });
     }
 
     const senhaCriptografada = await bcrypt.hash(senha, 10);
