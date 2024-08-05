@@ -1,8 +1,8 @@
-const categorias = require('../services/categorias');
+const { exibirCategorias } = require('../services/categorias');
 
-const listarCategoria = async (req, res) => {
+const listarCategorias = async (req, res) => {
     try {
-        const categoriasListadas = await categorias.exibirCategorias('categorias');
+        const categoriasListadas = await exibirCategorias('categorias');
 
         return res.status(200).json(categoriasListadas);
 
@@ -12,5 +12,5 @@ const listarCategoria = async (req, res) => {
 }
 
 module.exports = {
-    listarCategoria
+    listarCategorias
 }

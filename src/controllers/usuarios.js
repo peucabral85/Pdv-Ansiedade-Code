@@ -1,40 +1,40 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const knex = require("../connections/conexao");
 const transportador = require("../utils/email");
 const compiladorHtml = require("../utils/compiladorHtml");
 const {
   verificarEmailExistente,
   updateSenhaUsuario,
-  atualizarUsuarioService,
+  insertUsuario,
+  updateUsuario,
 } = require("../services/usuarios");
 
 const cadastrarUsuario = async (req, res) => {
+  const { nome, email, senha } = req.body;
 
-    const { nome, email, senha } = req.body;
-    try {
-        const emailJaCadastrado = await knex('usuarios').where({email}).first();
-        
-        if (emailJaCadastrado) {
-            return res.status(400).json({erro: 'Email já cadastrado'});
-        }
-      
-        const senhaHasheada = await bcrypt.hash(senha, 10);
-        
-        const usuario = await knex('usuarios').insert({nome, email, senha: senhaHasheada}).returning('*');
-        
-        return res.status(201).json(usuario);
-      
-        } catch(error) {
-            res.status(500).json({mensagem: "Erro interno do servidor."});
+  try {
+    const emailJaCadastrado = await verificarEmailExistente(email);
+
+    if (emailJaCadastrado) {
+      return res.status(400).json({ mensagem: 'Email já cadastrado.' });
     }
+
+    const senhaCriptografada = await bcrypt.hash(senha, 10);
+
+    const usuarioCadastrado = await insertUsuario(nome, email, senhaCriptografada);
+
+    return res.status(201).json(usuarioCadastrado);
+
+  } catch (error) {
+    res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
 }
 
 const logarUsuario = async (req, res) => {
   const { email, senha } = req.body;
 
   try {
-    const usuarioValidado = await knex("usuarios").where({ email }).first();
+    const usuarioValidado = await verificarEmailExistente(email);
 
     if (!usuarioValidado) {
       return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." });
@@ -56,9 +56,9 @@ const logarUsuario = async (req, res) => {
     };
 
     return res.status(200).json(usuario);
-    
+
   } catch (error) {
-      return res.status(500).json({ mensagem: "Erro interno do servidor." });
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 }
 
@@ -97,21 +97,16 @@ const redefinirSenhaUsuario = async (req, res) => {
     });
 
     return res.status(200).json({ mensagem: "Senha atualizada com sucesso." });
-    
+
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 }
 
-const detalharUsuario = async (req, res) => {
+const detalharUsuario = (req, res) => {
   const { usuario } = req;
 
-  try {
-    return res.status(200).json(usuario);
-    
-  } catch (error) {
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
-  }
+  return res.status(200).json(usuario);
 }
 
 const atualizarUsuario = async (req, res) => {
@@ -120,24 +115,16 @@ const atualizarUsuario = async (req, res) => {
 
   try {
 
-    const usuarioExiste = await knex("usuarios").where({ id: usuario.id });
+    const usuarioValidado = await verificarEmailExistente(email);
 
-    if (!usuarioExiste) {
-      return res.status(404).json({ mensagem: "Usuário não encontrado" });
+    if (usuarioValidado && usuarioValidado.id !== usuario.id) {
+      return res.status(409).json({ mensagem: "O e-mail informado já está sendo utilizado por outro usuário." });
     }
 
-    if (email !== usuario.email) {
-      const emailUsuarioExiste = await verificarEmailExistente(email);
+    await updateUsuario(nome, email, usuario.id);
 
-      if (emailUsuarioExiste) {
-        return res.status(409).json({ mensagem: "O email já existe" });
-      }
-    }
+    return res.status(200).json({ mensagem: "Usuário atualizado com sucesso." });
 
-    await knex("usuarios").update({ nome, email }).where({ id: usuario.id });
-
-    return res.status(200).json({mensagem: "Usuário atualizado com sucesso."});
-    
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
