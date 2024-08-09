@@ -1,5 +1,5 @@
 const { verificaCategoria } = require("../services/categorias");
-const { insertProduto } = require("../services/produtos");
+const { insertProduto, obterListaProdutos } = require("../services/produtos");
 
 const cadastrarProduto = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
@@ -20,6 +20,24 @@ const cadastrarProduto = async (req, res) => {
     }
 }
 
+const listarProdutos = async (req, res) => {
+    const categoria_id = req.query.categoria_id;
+
+    try {
+        if (categoria_id && !(await verificaCategoria(categoria_id))) {
+            return res.status(400).json({ mensagem: "A categoria informada não foi encontrada" });
+        }
+
+        const produtosListados = await obterListaProdutos(categoria_id);
+
+        return res.status(200).json(produtosListados);
+
+    } catch (error) {
+        return res.status(500).json({ mensagem: "Erro interno do servidor." });
+    }
+}
+
 module.exports = {
-    cadastrarProduto
+    cadastrarProduto,
+    listarProdutos
 }
