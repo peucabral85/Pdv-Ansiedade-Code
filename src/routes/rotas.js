@@ -20,5 +20,6 @@ rotas.use(verificaLogin);
 rotas.get('/usuario', usuarios.detalharUsuario);
 rotas.put('/usuario', validarCorpoSchema(schemaAtualizarUsuario), usuarios.atualizarUsuario);
 rotas.post('/produto', validarCorpoSchema(schemaProdutos), produtos.cadastrarProduto);
+rotas.get('/produto', produtos.listarProdutos);
 
 module.exports = rotas;
