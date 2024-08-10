@@ -6,6 +6,13 @@ const exibirCategorias = async (tabela) => {
     return categoriasListadas;
 }
 
+const verificaCategoria = async (id) => {
+    const categoriaEncontrada = await knex('categorias').where({ id }).first();
+
+    return categoriaEncontrada;
+}
+
 module.exports = {
-    exibirCategorias
+    exibirCategorias,
+    verificaCategoria
 }
