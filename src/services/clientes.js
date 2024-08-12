@@ -26,15 +26,23 @@ const insertCliente = async (nome, email, cpf, cep, rua, numero, bairro, cidade,
 }
 
 const verificarEmailExistenteCliente = async (email) => {
-    const emailValidado = await knex('cliente').where('email', 'ilike', email).first();
-
-    return emailValidado;
+    try {
+        const emailValidado = await knex('cliente').where('email', 'ilike', email).first();
+        
+            return emailValidado;
+    } catch (error) {
+        return res.status(500).json({mensagem: error.message})
+    }
 }
 
 const verificarCpfExistenteCliente = async (cpf) => {
-    const cpfValidado = await knex('cliente').where('cpf', 'ilike', cpf).first();
+    try {
+        const cpfValidado = await knex('cliente').where('cpf', 'ilike', cpf).first();
     
-    return cpfValidado;
+            return cpfValidado;
+    } catch (error) {
+        return res.status(500).json({mensagem: error.message})
+    }
 }
 
 module.exports = {

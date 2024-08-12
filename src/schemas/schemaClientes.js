@@ -13,7 +13,13 @@ const schemaCliente = joi.object({
     cpf: joi.string().required().messages({
         'any.required': 'O campo cpf é obrigatório',
         'string.empty': 'informe um cpf válido',
-    })
+    }),
+    cep:    joi.string(), 
+    rua:    joi.string(), 
+    numero: joi.string(), 
+    bairro: joi.string(), 
+    cidade: joi.string(), 
+    estado: joi.string()
 }) 
 
 module.exports = schemaCliente

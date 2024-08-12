@@ -5,8 +5,8 @@ const { insertCliente, verificarEmailExistenteCliente, verificarCpfExistenteClie
 const cadastrarCliente = async (req, res) => {
     const {nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
 
-    const emailExistente = verificarEmailExistenteCliente(email)
-    const cpfExistente = verificarCpfExistenteCliente(cpf)
+    const emailExistente = await verificarEmailExistenteCliente(email)
+    const cpfExistente = await verificarCpfExistenteCliente(cpf)
 
     if (emailExistente) {
         return res.status(409).json({ mensagem: "Já existe cliente cadastrado com o e-mail informado." });
@@ -17,11 +17,11 @@ const cadastrarCliente = async (req, res) => {
     }
 
     try {
-        const novoUsuario = insertCliente(nome, email, cpf, cep, rua, numero, bairro, cidade, estado)
+        const novoUsuario = await insertCliente(nome, email, cpf, cep, rua, numero, bairro, cidade, estado)
 
         
 
-        return res.send(novoUsuario)
+        return res.send(novoUsuario[0])
     } catch (error) {
         return res.status(500).json({ mensagem: "Erro interno do servidor." });
     }
