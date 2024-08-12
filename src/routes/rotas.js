@@ -17,11 +17,12 @@ rotas.post('/usuario', validarCorpoSchema(schemaCadastroUsuario), usuarios.cadas
 rotas.get('/categoria', categorias.listarCategorias);
 rotas.post('/login', validarCorpoSchema(schemaLogin), usuarios.logarUsuario);
 rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), usuarios.redefinirSenhaUsuario);
-rotas.get('/cliente', clientes.listarClientes)
+
 
 rotas.use(verificaLogin);
 
 rotas.post('/cliente', validarCorpoSchema(schemaCliente), clientes.cadastrarCliente);
+rotas.get('/cliente', clientes.listarClientes)
 rotas.get('/cliente/:id', clientes.detalharCliente)
 rotas.get('/usuario', usuarios.detalharUsuario);
 rotas.put('/usuario', validarCorpoSchema(schemaAtualizarUsuario), usuarios.atualizarUsuario);
