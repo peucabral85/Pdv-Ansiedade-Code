@@ -18,9 +18,11 @@ rotas.get('/categoria', categorias.listarCategorias);
 rotas.post('/login', validarCorpoSchema(schemaLogin), usuarios.logarUsuario);
 rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), usuarios.redefinirSenhaUsuario);
 
+
 rotas.use(verificaLogin);
 
 rotas.post('/cliente', validarCorpoSchema(schemaCliente), clientes.cadastrarCliente);
+rotas.get('/cliente/:id', clientes.detalharCliente)
 rotas.get('/usuario', usuarios.detalharUsuario);
 rotas.put('/usuario', validarCorpoSchema(schemaAtualizarUsuario), usuarios.atualizarUsuario);
 rotas.post('/produto', validarCorpoSchema(schemaProdutos), produtos.cadastrarProduto);
