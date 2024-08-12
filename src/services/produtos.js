@@ -21,7 +21,26 @@ const obterListaProdutos = async (filtro) => {
     return produtos;
 }
 
+const obterProdutoPorId = async (id) => {
+    return await knex('produtos')
+        .where({ id })
+        .first();
+}
+
+const atualizarProdutoService = async (descricao, quantidade_estoque, valor, categoria_id) => {
+    await knex('produtos')
+        .update({ descricao, quantidade_estoque, valor, categoria_id });
+}
+
+const excluirProdutoService = async (id) => {
+    await knex('produtos')
+        .delete().where({ id });
+}
+
 module.exports = {
     insertProduto,
-    obterListaProdutos
+    obterListaProdutos,
+    obterProdutoPorId,
+    atualizarProdutoService,
+    excluirProdutoService
 }
