@@ -3,7 +3,8 @@ const joi = require('joi');
 const schemaProdutos = joi.object({
     descricao: joi.string().required().messages({
         'any.required': 'O campo descricao é obrigatório.',
-        'string.empty': 'O campo descricao é obrigatório.'
+        'string.empty': 'O campo descricao é obrigatório.',
+        'string.base': 'O campo descricao deve ser uma string.'
     }),
 
     quantidade_estoque: joi.number().positive().integer().required().messages({
