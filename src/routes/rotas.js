@@ -22,5 +22,7 @@ rotas.put('/usuario', validarCorpoSchema(schemaAtualizarUsuario), usuarios.atual
 rotas.post('/produto', validarCorpoSchema(schemaProdutos), produtos.cadastrarProduto);
 rotas.get('/produto', produtos.listarProdutos);
 rotas.get('/produto/:id', produtos.detalharProduto);
+rotas.put('/produto/:id', validarCorpoSchema(schemaProdutos), produtos.atualizarProduto);
+rotas.delete('/produto/:id', produtos.excluirProduto);
 
 module.exports = rotas;
