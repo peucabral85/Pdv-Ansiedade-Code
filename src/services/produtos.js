@@ -21,7 +21,15 @@ const obterListaProdutos = async (filtro) => {
     return produtos;
 }
 
+const produtoEspecifico = async (id) => {
+
+    const produto = await knex("produtos").where('id', id).first();
+
+    return produto;
+}
+
 module.exports = {
     insertProduto,
-    obterListaProdutos
+    obterListaProdutos,
+    produtoEspecifico
 }
