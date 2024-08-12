@@ -7,6 +7,8 @@ const { schemaRedefinicaoSenha, schemaCadastroUsuario, schemaAtualizarUsuario } 
 const { schemaLogin } = require('../schemas/schemaLogin');
 const schemaProdutos = require('../schemas/schemaProdutos');
 const { verificaLogin } = require('../middlewares/autenticacaoLogin');
+const clientes = require('../controllers/clientes')
+const schemaCliente = require('../schemas/schemaClientes');
 
 const rotas = express();
 
@@ -16,7 +18,7 @@ rotas.post('/login', validarCorpoSchema(schemaLogin), usuarios.logarUsuario);
 rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), usuarios.redefinirSenhaUsuario);
 
 rotas.use(verificaLogin);
-
+rotas.post('/cliente', validarCorpoSchema(schemaCliente), clientes.cadastrarCliente);
 rotas.get('/usuario', usuarios.detalharUsuario);
 rotas.put('/usuario', validarCorpoSchema(schemaAtualizarUsuario), usuarios.atualizarUsuario);
 rotas.post('/produto', validarCorpoSchema(schemaProdutos), produtos.cadastrarProduto);
