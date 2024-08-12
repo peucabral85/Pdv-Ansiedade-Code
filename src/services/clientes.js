@@ -10,17 +10,7 @@ const insertCliente = async (nome, email, cpf, cep, rua, numero, bairro, cidade,
         numero,
         bairro,
         cidade,
-        estado }).returning([
-            'id',
-            'nome',
-            'email',
-            'cpf',
-            'cep',
-            'rua',
-            'numero',
-            'bairro',
-            'cidade',
-            'estado']);
+        estado }).returning('*');
             
     return cliente;
 }
