@@ -22,6 +22,12 @@ const selectClienteUnico = async ( id ) => {
     return cliente;
 }
 
+const listaClientes = async () => {
+    const clientes = await knex("clientes")
+
+    return clientes
+}
+
 const verificarEmailExistenteCliente = async (email) => {
     const emailValidado = await knex('clientes').where('email', 'ilike', email).first();
 
@@ -38,5 +44,6 @@ module.exports = {
     insertCliente,
     verificarCpfExistenteCliente,
     verificarEmailExistenteCliente,
-    selectClienteUnico
+    selectClienteUnico,
+    listaClientes
 }
