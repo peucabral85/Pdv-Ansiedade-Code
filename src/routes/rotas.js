@@ -2,13 +2,14 @@ const express = require('express');
 const categorias = require('../controllers/categorias');
 const usuarios = require('../controllers/usuarios');
 const produtos = require('../controllers/produtos');
+const clientes = require('../controllers/clientes');
 const validarCorpoSchema = require('../middlewares/validarCorpoSchema');
 const { schemaRedefinicaoSenha, schemaCadastroUsuario, schemaAtualizarUsuario } = require('../schemas/schemaUsuarios');
 const { schemaLogin } = require('../schemas/schemaLogin');
 const schemaProdutos = require('../schemas/schemaProdutos');
-const { verificaLogin } = require('../middlewares/autenticacaoLogin');
-const clientes = require('../controllers/clientes')
 const schemaCliente = require('../schemas/schemaClientes');
+const { verificaLogin } = require('../middlewares/autenticacaoLogin');
+
 
 const rotas = express();
 
@@ -18,6 +19,7 @@ rotas.post('/login', validarCorpoSchema(schemaLogin), usuarios.logarUsuario);
 rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), usuarios.redefinirSenhaUsuario);
 
 rotas.use(verificaLogin);
+
 rotas.post('/cliente', validarCorpoSchema(schemaCliente), clientes.cadastrarCliente);
 rotas.get('/usuario', usuarios.detalharUsuario);
 rotas.put('/usuario', validarCorpoSchema(schemaAtualizarUsuario), usuarios.atualizarUsuario);
