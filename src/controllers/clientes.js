@@ -1,4 +1,4 @@
-const { insertCliente, verificarEmailExistenteCliente, verificarCpfExistenteCliente, selectClienteUnico } = require("../services/clientes");
+const { insertCliente, verificarEmailExistenteCliente, verificarCpfExistenteCliente, selectClienteUnico, listaClientes } = require("../services/clientes");
 
 const cadastrarCliente = async (req, res) => {
     const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
@@ -42,7 +42,18 @@ const detalharCliente = async (req, res) => {
     }
 }
 
+const listarClientes = async (req, res) => {
+   try {
+    const clientes = await listaClientes()
+
+    return res.json(clientes)
+   } catch (error) {
+    return res.status(500).json({mensagem: 'Erro interno do servidor'});
+   }
+}
+
 module.exports = {
     cadastrarCliente,
-    detalharCliente
+    detalharCliente,
+    listarClientes
 }
