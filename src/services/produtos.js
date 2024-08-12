@@ -27,9 +27,10 @@ const obterProdutoPorId = async (id) => {
         .first();
 }
 
-const atualizarProdutoService = async (descricao, quantidade_estoque, valor, categoria_id) => {
+const atualizarProdutoService = async (descricao, quantidade_estoque, valor, categoria_id, id) => {
     await knex('produtos')
-        .update({ descricao, quantidade_estoque, valor, categoria_id });
+        .update({ descricao, quantidade_estoque, valor, categoria_id })
+        .where({ id });
 }
 
 const excluirProdutoService = async (id) => {

@@ -15,7 +15,7 @@ const cadastrarProduto = async (req, res) => {
 
         return res.status(201).json(produtoCadastrado);
 
-    } catch (error) {        
+    } catch (error) {
         return res.status(500).json({ mensagem: "Erro interno no servidor." });
     }
 }
@@ -54,9 +54,10 @@ const atualizarProduto = async (req, res) => {
             return res.status(400).json({ mensagem: "Categoria informada não encontrada." });
         }
 
-        await atualizarProdutoService(descricao, quantidade_estoque, valor, categoria_id);
+        await atualizarProdutoService(descricao, quantidade_estoque, valor, categoria_id, id);
 
-        return res.status(204).send();
+        return res.status(200).json({ mensagem: "Produto atualizado com sucesso." });
+
     } catch (error) {
         return res.status(500).json({ mensagem: "Erro interno no servidor." });
     }
@@ -74,7 +75,8 @@ const excluirProduto = async (req, res) => {
 
         await excluirProdutoService(id);
 
-        return res.status(204).send();
+        return res.status(200).json({ mensagem: "Produto excluído com sucesso." });
+
     } catch (error) {
         return res.status(500).json({ mensagem: "Erro interno no servidor." });
     }
