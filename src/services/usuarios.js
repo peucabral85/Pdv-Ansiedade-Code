@@ -15,7 +15,7 @@ const verificarEmailExistente = async (email) => {
 const insertUsuario = async (nome, email, senha) => {
     const usuario = await knex('usuarios').insert({ nome, email, senha }).returning(['id', 'nome', 'email']);
 
-    return usuario;
+    return usuario[0];
 }
 
 const updateSenhaUsuario = async (id, senha) => {
