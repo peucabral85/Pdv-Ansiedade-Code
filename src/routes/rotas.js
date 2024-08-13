@@ -22,8 +22,9 @@ rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), us
 rotas.use(verificaLogin);
 
 rotas.post('/cliente', validarCorpoSchema(schemaCliente), clientes.cadastrarCliente);
-rotas.get('/cliente', clientes.listarClientes)
-rotas.get('/cliente/:id', clientes.detalharCliente)
+rotas.get('/cliente', clientes.listarClientes);
+rotas.get('/cliente/:id', clientes.detalharCliente);
+rotas.put('/cliente/:id', validarCorpoSchema(schemaCliente), clientes.alterarCliente);
 rotas.get('/usuario', usuarios.detalharUsuario);
 rotas.put('/usuario', validarCorpoSchema(schemaAtualizarUsuario), usuarios.atualizarUsuario);
 rotas.post('/produto', validarCorpoSchema(schemaProdutos), produtos.cadastrarProduto);

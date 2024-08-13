@@ -16,16 +16,30 @@ const insertCliente = async (nome, email, cpf, cep, rua, numero, bairro, cidade,
     return cliente[0];
 }
 
-const selectClienteUnico = async ( id ) => {
-    const cliente = await knex("clientes").where('id', id).first();
-
-    return cliente;
+const updateCliente = async (nome, email, cpf, cep, rua, numero, bairro, cidade, estado, id) => {
+    await knex('clientes').update({
+        nome,
+        email,
+        cpf,
+        cep,
+        rua,
+        numero,
+        bairro,
+        cidade,
+        estado
+    }).where({ id });
 }
 
 const listaClientes = async () => {
-    const clientes = await knex("clientes")
+    const clientes = await knex('clientes').orderBy('id');
 
-    return clientes
+    return clientes;
+}
+
+const selectClienteUnico = async (id) => {
+    const cliente = await knex('clientes').where({ id }).first();
+
+    return cliente;
 }
 
 const verificarEmailExistenteCliente = async (email) => {
@@ -42,8 +56,9 @@ const verificarCpfExistenteCliente = async (cpf) => {
 
 module.exports = {
     insertCliente,
-    verificarCpfExistenteCliente,
-    verificarEmailExistenteCliente,
+    updateCliente,
+    listaClientes,
     selectClienteUnico,
-    listaClientes
+    verificarCpfExistenteCliente,
+    verificarEmailExistenteCliente
 }
