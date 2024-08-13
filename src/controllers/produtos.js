@@ -1,5 +1,9 @@
 const { verificaCategoria } = require("../services/categorias");
-const { insertProduto, obterListaProdutos, atualizarProdutoService, obterProdutoPorId, excluirProdutoService, produtoEspecifico } = require("../services/produtos");
+const { insertProduto,
+    obterListaProdutos,
+    atualizarProdutoService,
+    obterProdutoPorId, excluirProdutoService
+} = require("../services/produtos");
 
 const cadastrarProduto = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
@@ -41,13 +45,13 @@ const detalharProduto = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const produto = await produtoEspecifico(id);
+        const produtoExistente = await obterProdutoPorId(id);
 
-        if (!produto) {
-            return res.status(404).json("Produto não encontrado.")
+        if (!produtoExistente) {
+            return res.status(404).json({ mensagem: "Produto não encontrado." });
         }
 
-        return res.status(200).json(produto)
+        return res.status(200).json(produtoExistente);
 
     } catch (error) {
         return res.status(500).json({ mensagem: "Erro interno do servidor." });

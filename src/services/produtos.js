@@ -16,15 +16,9 @@ const obterListaProdutos = async (filtro) => {
             if (filtro) {
                 return query.where('c.id', filtro);
             }
-        });
+        }).orderBy('id');
 
     return produtos;
-}
-
-const produtoEspecifico = async (id) => {
-    const produto = await knex("produtos").where('id', id).first();
-
-    return produto;
 }
 
 const obterProdutoPorId = async (id) => {
@@ -47,7 +41,6 @@ const excluirProdutoService = async (id) => {
 module.exports = {
     insertProduto,
     obterListaProdutos,
-    produtoEspecifico,
     obterProdutoPorId,
     atualizarProdutoService,
     excluirProdutoService

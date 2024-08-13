@@ -1,4 +1,5 @@
-const joi = require('joi')
+const validadorCpf = require('@fnando/cpf');
+const joi = require('joi');
 
 const schemaCliente = joi.object({
     nome: joi.string().required().messages({
@@ -14,33 +15,45 @@ const schemaCliente = joi.object({
         'string.base': 'O campo email deve ser uma string.'
     }),
 
-    cpf: joi.string().pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/).required().messages({
+    cpf: joi.string().required().messages({
         'any.required': 'O campo cpf é obrigatório.',
         'string.empty': 'O campo cpf é obrigatório.',
-        'string.pattern.base': 'O CPF deve estar no formato 123.456.789-09.',
-        'string.base': 'O campo CPF deve ser uma string.'
+        'string.base': 'O campo CPF deve ser uma string.',
+        'any.invalid': 'O CPF informado é inválido.'
+    }).custom((value, helpers) => {
+        const cpfSemFormatacao = validadorCpf.strip(value);
+        if (!validadorCpf.isValid(cpfSemFormatacao)) {
+            return helpers.error('any.invalid');
+        }
+        return cpfSemFormatacao;
     }),
 
-    cep: joi.string().pattern(/^\d{5}-\d{3}$/).optional().messages({
-        'string.pattern.base': 'O CEP deve estar no formato 12345-678',
+    cep: joi.string().allow(null).optional().messages({
+        'string.pattern.base': 'O CEP foi informado num formato inválido.',
         'string.base': 'O campo CEP deve ser uma string.'
+    }).custom((value, helpers) => {
+        const cepSemFormatacao = value.replace(/\D/g, '');
+        if (cepSemFormatacao.length !== 8) {
+            return helpers.error('string.pattern.base');
+        }
+        return cepSemFormatacao;
     }),
 
-    rua: joi.string().optional().messages({
+    rua: joi.string().allow(null).optional().messages({
         'string.base': 'O campo rua deve ser uma string.'
     }),
-    numero: joi.string().optional().messages({
+    numero: joi.string().allow(null).optional().messages({
         'string.base': 'O campo numero deve ser uma string.'
     }),
-    bairro: joi.string().optional().messages({
+    bairro: joi.string().allow(null).optional().messages({
         'string.base': 'O campo bairro deve ser uma string.'
     }),
-    cidade: joi.string().optional().messages({
+    cidade: joi.string().allow(null).optional().messages({
         'string.base': 'O campo cidade deve ser uma string.'
     }),
-    estado: joi.string().optional().messages({
+    estado: joi.string().allow(null).optional().messages({
         'string.base': 'O campo estado deve ser uma string.'
     })
-})
+});
 
 module.exports = schemaCliente
