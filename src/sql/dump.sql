@@ -1,3 +1,10 @@
+drop table if exists usuarios;
+drop table if exists categorias;
+drop table if exists produtos;
+drop table if exists clientes;
+drop table if exists pedidos;
+drop table if exists pedido_produtos;
+
 create table usuarios(
     id serial primary key,
     nome varchar(250) not null,
@@ -40,4 +47,22 @@ create table clientes (
 	bairro varchar(250),
 	cidade varchar(250),
 	estado varchar(100)
+);
+
+alter table produtos
+add column imagem_url text;
+
+create table pedidos(
+	id serial primary key,
+    cliente_id integer not null references clientes(id),
+    observacao text,
+    valor_total integer
+);
+
+create table pedidos_produtos(
+	id serial primary key,
+    pedido_id integer not null references pedidos(id),
+    produto_id integer not null references produtos(id),
+    quantidade_produto integer not null,
+    valor_produto integer
 );
