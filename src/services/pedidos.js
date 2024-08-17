@@ -2,7 +2,23 @@ const knex = require('../connections/conexao');
 const { obterProdutoPorId, atualizarEstoqueProduto } = require('./produtos');
 
 const validarPedido = async (pedido_produtos) => {
-    const produtos = Promise.all(pedido_produtos.map(async produto => {
+
+    const produtosIguaisAgrupados = pedido_produtos.reduce((acumulador, produto) => {
+        if (!acumulador[produto.produto_id]) {
+            acumulador[produto.produto_id] = {
+                produto_id: produto.produto_id,
+                quantidade_produto: 0
+            };
+        }
+
+        acumulador[produto.produto_id].quantidade_produto += produto.quantidade_produto;
+
+        return acumulador;
+    }, {});
+
+    const pedidoProdutosAgrupados = Object.values(produtosIguaisAgrupados);
+
+    const produtos = Promise.all(pedidoProdutosAgrupados.map(async produto => {
         const produtoEncontrado = await obterProdutoPorId(produto.produto_id);
 
         if (!produtoEncontrado) {
