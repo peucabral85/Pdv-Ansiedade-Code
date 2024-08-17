@@ -8,9 +8,9 @@ const schemaPedidos = joi.object({
         'number.integer': 'O valor informado no campo cliente_id precisa ser um número inteiro.'
     }),
 
-    observacao: joi.string().optional().messages({
-        'string.base': 'O campo observacao é obrigatório.',
-        'string.empty': 'O campo observacao é obrigatório.'
+    observacao: joi.string().optional().allow(null).trim().messages({
+        'string.base': 'O campo observacao deve ser uma string.',
+        'string.empty': 'Se informado, o campo observacao não pode conter somente espaços em branco.'
     }),
 
     pedido_produtos: joi.array().min(1).required().items(joi.object({
