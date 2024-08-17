@@ -3,11 +3,13 @@ const categorias = require('../controllers/categorias');
 const usuarios = require('../controllers/usuarios');
 const produtos = require('../controllers/produtos');
 const clientes = require('../controllers/clientes');
+const pedidos = require('../controllers/pedidos');
 const validarCorpoSchema = require('../middlewares/validarCorpoSchema');
 const { schemaRedefinicaoSenha, schemaCadastroUsuario, schemaAtualizarUsuario } = require('../schemas/schemaUsuarios');
 const { schemaLogin } = require('../schemas/schemaLogin');
 const schemaProdutos = require('../schemas/schemaProdutos');
 const schemaCliente = require('../schemas/schemaClientes');
+const schemaPedidos = require('../schemas/schemaPedidos');
 const { verificaLogin } = require('../middlewares/autenticacaoLogin');
 
 
@@ -32,5 +34,6 @@ rotas.get('/produto', produtos.listarProdutos);
 rotas.get('/produto/:id', produtos.detalharProduto);
 rotas.put('/produto/:id', validarCorpoSchema(schemaProdutos), produtos.atualizarProduto);
 rotas.delete('/produto/:id', produtos.excluirProduto);
+rotas.post('/pedido', validarCorpoSchema(schemaPedidos), pedidos.cadastrarPedido);
 
 module.exports = rotas;
