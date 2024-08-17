@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        h1 {
+            background-color: #6E2C31;
+            color: #FFF;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+            text-align: center;
+        }
+
+        p {
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #6E2C31;
+            color: #FFF;
+        }
+
+        .total-pedido {
+            background-color: #424242;
+            color: #FFF;
+            font-weight: bold;
+            line-height: 1.2rem;
+        }
+
+        .footer {
+            margin-top: 5px;
+            background-color: #6E2C31;
+            color: #FFF;
+            padding: 10px;
+            border-radius: 0 0 5px 5px;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Logo da Empresa -->
+        <div class="logo">
+            <img src="https://images2.imgbox.com/9f/bc/5oOlUgbD_o.png" alt="Logo">
+        </div>
+
+        <h1>Confirmação do Pedido nº {{pedido_id}}</h1>
+        <p>Olá {{nome_cliente}}, seu pedido foi realizado com sucesso. Agradecemos por escolher nossa loja!</p>
+        <h3>Detalhes do pedido:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor Unit.</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each pedido_produtos}}
+                <tr>
+                    <td>{{produto}}</td>
+                    <td>{{quantidade_produto}}</td>
+                    <td>{{valor}}</td>
+                    <td>{{total}}</td>
+                </tr>
+                {{/each}}
+                <tr>
+                    <td colspan="4"></td>
+                </tr>
+                <tr class="total-pedido">
+                    <td colspan="3"><strong>Total do Pedido</strong></td>
+                    <td>{{valor_total}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <p>Seu pedido será processado e em breve você receberá outra notificação quando for faturado e despachado.</p>
+    </div>
+    <div class="footer">
+        © 2024 Ansiedade Code. Todos os direitos reservados.
+    </div>
+</body>
+
+</html>

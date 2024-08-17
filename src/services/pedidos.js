@@ -37,7 +37,8 @@ const validarPedido = async (pedido_produtos) => {
             produto_id: produtoEncontrado.id,
             produto: produtoEncontrado.descricao,
             quantidade_produto: produto.quantidade_produto,
-            valor: produtoEncontrado.valor
+            valor: produtoEncontrado.valor,
+            total: produto.quantidade_produto * produtoEncontrado.valor
         }
 
         return produtoValidado;
@@ -60,7 +61,7 @@ const finalizarPedido = async (cliente, observacao, produtos) => {
                 pedido_id: pedidoCriado[0].id,
                 produto_id: produto.produto_id,
                 quantidade_produto: produto.quantidade_produto,
-                valor_produto: produto.quantidade_produto * produto.valor
+                valor_produto: produto.total
             });
 
         await atualizarEstoqueProduto(produto.produto_id, produto.quantidade_produto, transacao);
