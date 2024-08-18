@@ -38,10 +38,17 @@ const excluirProdutoService = async (id) => {
         .delete().where({ id });
 }
 
+const atualizarEstoqueProduto = async (id, quantidade_produto, transacao) => {
+    await transacao('produtos')
+        .update({ quantidade_estoque: knex.raw('quantidade_estoque - ?', [quantidade_produto]) })
+        .where({ id });
+}
+
 module.exports = {
     insertProduto,
     obterListaProdutos,
     obterProdutoPorId,
     atualizarProdutoService,
-    excluirProdutoService
+    excluirProdutoService,
+    atualizarEstoqueProduto
 }
