@@ -1,8 +1,9 @@
+const knex = require("knex");
 const { verificaCategoria } = require("../services/categorias");
 const { insertProduto,
     obterListaProdutos,
     atualizarProdutoService,
-    obterProdutoPorId, excluirProdutoService
+    obterProdutoPorId, excluirProdutoService, verificarSeExistePedidoParaProduto
 } = require("../services/produtos");
 
 const cadastrarProduto = async (req, res) => {
@@ -92,6 +93,12 @@ const excluirProduto = async (req, res) => {
 
         if (!produtoExistente) {
             return res.status(404).json({ mensagem: "Produto não encontrado." });
+        }
+
+        const existeProdutoPedido = await verificarSeExistePedidoParaProduto(id);
+
+        if (existeProdutoPedido) {
+            return res.status(404).json({ mensagem: "Esse produto não pode ser excluído devido a existência de um pedido em aberto" });
         }
 
         await excluirProdutoService(id);

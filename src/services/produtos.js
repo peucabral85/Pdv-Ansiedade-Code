@@ -44,11 +44,20 @@ const atualizarEstoqueProduto = async (id, quantidade_produto, transacao) => {
         .where({ id });
 }
 
+const verificarSeExistePedidoParaProduto = async (produto_id) => {
+    const pedidoPendente = await knex('pedidos_produtos')
+        .where({ produto_id })
+        .first()
+
+    return pedidoPendente
+}
+
 module.exports = {
     insertProduto,
     obterListaProdutos,
     obterProdutoPorId,
     atualizarProdutoService,
     excluirProdutoService,
-    atualizarEstoqueProduto
+    atualizarEstoqueProduto,
+    verificarSeExistePedidoParaProduto
 }

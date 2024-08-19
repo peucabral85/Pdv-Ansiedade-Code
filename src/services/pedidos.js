@@ -89,6 +89,8 @@ const finalizarPedido = async (cliente, observacao, produtos) => {
     return { pedido, transacao };
 }
 
+
+
 module.exports = {
     validarPedido,
     finalizarPedido
