@@ -35,5 +35,6 @@ rotas.get('/produto/:id', produtos.detalharProduto);
 rotas.put('/produto/:id', validarCorpoSchema(schemaProdutos), produtos.atualizarProduto);
 rotas.delete('/produto/:id', produtos.excluirProduto);
 rotas.post('/pedido', validarCorpoSchema(schemaPedidos), pedidos.cadastrarPedido);
+rotas.get('/pedido', pedidos.listarPedidos);
 
 module.exports = rotas;
