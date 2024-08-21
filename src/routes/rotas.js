@@ -18,7 +18,6 @@ rotas.post('/usuario', validarCorpoSchema(schemaCadastroUsuario), usuarios.cadas
 rotas.get('/categoria', categorias.listarCategorias);
 rotas.post('/login', validarCorpoSchema(schemaLogin), usuarios.logarUsuario);
 rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), usuarios.redefinirSenhaUsuario);
-rotas.patch('/produto/:id/imagem', multer.single('imagem'), produtos.atualizarAdicionarImagem)
 
 rotas.use(verificaLogin);
 
@@ -33,5 +32,6 @@ rotas.get('/produto', produtos.listarProdutos);
 rotas.get('/produto/:id', produtos.detalharProduto);
 rotas.put('/produto/:id', validarCorpoSchema(schemaProdutos), produtos.atualizarProduto);
 rotas.delete('/produto/:id', produtos.excluirProduto);
+rotas.patch('/produto/:id/imagem', multer.single('imagem'), produtos.atualizarAdicionarImagem)
 
 module.exports = rotas;
