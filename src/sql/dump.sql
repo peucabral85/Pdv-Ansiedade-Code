@@ -33,6 +33,7 @@ create table produtos (
 	descricao text not null,
 	quantidade_estoque integer not null,
 	valor integer not null,
+    imagem_url text,
 	categoria_id int not null references categorias(id)
 );
 
