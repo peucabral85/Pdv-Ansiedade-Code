@@ -1,5 +1,5 @@
 const knex = require('../connections/conexao');
-const clients3 = require('../connections/conexaoAws')
+const clients3 = require('../connections/conexaoAws');
 const { PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3')
 
 const insertProduto = async (descricao, quantidade_estoque, valor, categoria_id) => {
@@ -40,10 +40,24 @@ const excluirProdutoService = async (id) => {
         .delete().where({ id });
 }
 
+const atualizarEstoqueProduto = async (id, quantidade_produto, transacao) => {
+    await transacao('produtos')
+        .update({ quantidade_estoque: knex.raw('quantidade_estoque - ?', [quantidade_produto]) })
+        .where({ id });
+}
+
+const verificarSeExistePedidoParaProduto = async (produto_id) => {
+    const pedido = await knex('pedidos_produtos')
+        .where({ produto_id })
+        .first();
+
+    return pedido;
+}
+
 const atualizarImagemService = async (id, imagem_url) => {
     await knex('produtos')
         .update({imagem_url})
-        .where({ id })
+        .where({ id });
 }
 
 const enviarImagem = async(path, buffer, mimeType) => {
@@ -54,18 +68,17 @@ const enviarImagem = async(path, buffer, mimeType) => {
         Body: buffer,
         ContentType: mimeType,
       })
-    )
-    
-    return arquivo
+    );  
+    return arquivo;
 }
 
 const deletarImagem = async(path) => {
-    const arquivo = await clients3.send(
+    await clients3.send(
         new DeleteObjectCommand({
         Bucket: process.env.S3_BUCKET_NAME,
         Key: path
       })
-    )
+    );
 }
 
 module.exports = {
@@ -77,4 +90,6 @@ module.exports = {
     enviarImagem,
     deletarImagem,
     atualizarImagemService
+    atualizarEstoqueProduto,
+    verificarSeExistePedidoParaProduto
 }
