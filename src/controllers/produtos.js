@@ -9,7 +9,6 @@ const { insertProduto,
     atualizarImagemService
 } = require("../services/produtos");
 const { randomUUID } = require('crypto');
-const { isNull } = require("util");
 
 const cadastrarProduto = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
@@ -158,7 +157,6 @@ const atualizarAdicionarImagem = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error);
 
         return res.status(500).json({ mensagem: "Erro interno do servidor." });
     }

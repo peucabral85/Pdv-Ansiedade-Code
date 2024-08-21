@@ -1,6 +1,6 @@
 const knex = require('../connections/conexao');
 const clients3 = require('../connections/conexaoAws')
-const { PutObjectCommand, DeleteBucketCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3')
+const { PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3')
 
 const insertProduto = async (descricao, quantidade_estoque, valor, categoria_id) => {
     const produto = await knex('produtos')
