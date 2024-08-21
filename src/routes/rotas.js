@@ -9,6 +9,7 @@ const { schemaLogin } = require('../schemas/schemaLogin');
 const schemaProdutos = require('../schemas/schemaProdutos');
 const schemaCliente = require('../schemas/schemaClientes');
 const { verificaLogin } = require('../middlewares/autenticacaoLogin');
+const multer = require('../middlewares/multer');
 
 
 const rotas = express();
@@ -17,7 +18,7 @@ rotas.post('/usuario', validarCorpoSchema(schemaCadastroUsuario), usuarios.cadas
 rotas.get('/categoria', categorias.listarCategorias);
 rotas.post('/login', validarCorpoSchema(schemaLogin), usuarios.logarUsuario);
 rotas.patch('/usuario/redefinir', validarCorpoSchema(schemaRedefinicaoSenha), usuarios.redefinirSenhaUsuario);
-
+rotas.patch('/produto/:id/imagem', multer.single('imagem'), produtos.atualizarAdicionarImagem)
 
 rotas.use(verificaLogin);
 
