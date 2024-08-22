@@ -60,7 +60,7 @@ create table pedidos(
     valor_total integer
 );
 
-create table pedidos_produtos(
+create table pedido_produtos(
 	id serial primary key,
     pedido_id integer not null references pedidos(id),
     produto_id integer not null references produtos(id),
