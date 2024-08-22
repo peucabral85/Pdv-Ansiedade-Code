@@ -1,31 +1,28 @@
-const knex = require("knex");
 const path = require("path");
 const { randomUUID } = require('crypto');
-const { verificaCategoria } = require("../services/categorias");
-const { insertProduto,
+const { verificarCategoriaService } = require("../services/categorias");
+const { cadastrarProdutoService,
     obterListaProdutos,
     atualizarProdutoService,
-    obterProdutoPorId, 
+    obterProdutoPorId,
     excluirProdutoService,
     enviarImagem,
     deletarImagem,
     atualizarImagemService,
-    obterProdutoPorId, 
-    excluirProdutoService, 
     verificarSeExistePedidoParaProduto
 } = require("../services/produtos");
 
-const cadastrarProduto = async (req, res) => {
+const cadastrarProdutos = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
     try {
-        const categoriaEncontrada = await verificaCategoria(categoria_id);
+        const categoriaEncontrada = await verificarCategoriaService(categoria_id);
 
         if (!categoriaEncontrada) {
             return res.status(400).json({ mensagem: "Categoria informada não encontrada." });
         }
 
-        const produtoCadastrado = await insertProduto(descricao, quantidade_estoque, valor, categoria_id);
+        const produtoCadastrado = await cadastrarProdutoService(descricao, quantidade_estoque, valor, categoria_id);
 
         return res.status(201).json(produtoCadastrado);
 
@@ -38,7 +35,7 @@ const listarProdutos = async (req, res) => {
     const categoria_id = req.query.categoria_id;
 
     try {
-        if (categoria_id && !(await verificaCategoria(categoria_id))) {
+        if (categoria_id && !(await verificarCategoriaService(categoria_id))) {
             return res.status(400).json({ mensagem: "A categoria informada não foi encontrada" });
         }
 
@@ -79,7 +76,7 @@ const atualizarProduto = async (req, res) => {
             return res.status(404).json({ mensagem: "Produto não encontrado." });
         }
 
-        const categoriaEncontrada = await verificaCategoria(categoria_id);
+        const categoriaEncontrada = await verificarCategoriaService(categoria_id);
 
         if (!categoriaEncontrada) {
             return res.status(400).json({ mensagem: "Categoria informada não encontrada." });
@@ -107,7 +104,7 @@ const excluirProduto = async (req, res) => {
         const existeProdutoPedido = await verificarSeExistePedidoParaProduto(id);
 
         if (existeProdutoPedido) {
-            return res.status(404).json({ mensagem: "Esse produto não pode ser excluído devido a existência de um pedido em aberto." });
+            return res.status(404).json({ mensagem: "Não é possível excluir o produto, pois ele está vinculado a um ou mais pedidos." });
         }
 
         await excluirProdutoService(id);
@@ -122,7 +119,7 @@ const excluirProduto = async (req, res) => {
     }
 }
 
-const atualizarAdicionarImagem = async (req, res) => {
+const adicionarImagemProduto = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -158,7 +155,7 @@ const atualizarAdicionarImagem = async (req, res) => {
             buffer,
             mimetype
         )
-        const url = `${process.env.S3_ENDPOINT_BASE}/${process.env.S3_BUCKET_NAME}/imagens/${nomeArquivo}`;
+        const url = `${process.env.STORAGE_BASEURL}/${process.env.STORAGE_BUCKET}/imagens/${nomeArquivo}`;
 
         await atualizarImagemService(id, url);
 
@@ -173,10 +170,10 @@ const atualizarAdicionarImagem = async (req, res) => {
 }
 
 module.exports = {
-    cadastrarProduto,
+    cadastrarProdutos,
     listarProdutos,
     detalharProduto,
     atualizarProduto,
     excluirProduto,
-    atualizarAdicionarImagem
+    adicionarImagemProduto
 }

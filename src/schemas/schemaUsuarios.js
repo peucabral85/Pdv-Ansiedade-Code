@@ -40,11 +40,11 @@ const schemaRedefinicaoSenha = joi.object({
         'string.empty': 'O campo senha_nova é obrigatório.',
         'string.base': 'Deve ser informado um conteúdo de texto para o campo senha_nova.'
     })
-}).custom((value, helpers) => {
-    if (value.senha_antiga === value.senha_nova) {
+}).custom((senha, helpers) => {
+    if (senha.senha_antiga === senha.senha_nova) {
         return helpers.message('A nova senha não pode ser igual à antiga.');
     }
-    return value;
+    return senha;
 });
 
 const schemaAtualizarUsuario = joi.object({

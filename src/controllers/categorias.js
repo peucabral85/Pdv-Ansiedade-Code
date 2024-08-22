@@ -1,8 +1,8 @@
-const { exibirCategorias } = require('../services/categorias');
+const { listarCategoriasService } = require('../services/categorias');
 
 const listarCategorias = async (req, res) => {
     try {
-        const categoriasListadas = await exibirCategorias('categorias');
+        const categoriasListadas = await listarCategoriasService('categorias');
 
         return res.status(200).json(categoriasListadas);
 

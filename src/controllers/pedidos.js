@@ -1,18 +1,13 @@
-const knex = require("../connections/conexao");
-const { selectClienteUnico } = require("../services/clientes");
-const {
-  validarPedido,
-  finalizarPedido,
-  listarPedidosService,
-} = require("../services/pedidos");
+const { obterCliente } = require("../services/clientes");
+const { validarPedido, finalizarPedido, listarPedidosService } = require("../services/pedidos");
 const compiladorHtml = require("../utils/compiladorHtml");
 const email = require("../utils/email");
 
-const cadastrarPedido = async (req, res) => {
+const cadastrarPedidos = async (req, res) => {
   const { cliente_id, observacao, pedido_produtos } = req.body;
 
   try {
-    const clienteVerificado = await selectClienteUnico(cliente_id);
+    const clienteVerificado = await obterCliente(cliente_id);
 
     if (!clienteVerificado) {
       return res.status(400).json({ mensagem: "Cliente não encontrado." });
@@ -61,6 +56,7 @@ const cadastrarPedido = async (req, res) => {
     await transacao.commit();
 
     return res.status(201).json(pedido);
+
   } catch (error) {
     if (
       error.tipoErro === "PRODUTO_NAO_ENCONTRADO" ||
@@ -109,14 +105,13 @@ const listarPedidos = async (req, res) => {
     }, []);
 
     return res.status(200).json(pedidosFormatados);
+
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
-
-
 module.exports = {
-  cadastrarPedido,
-  listarPedidos,
+  cadastrarPedidos,
+  listarPedidos
 };

@@ -64,7 +64,7 @@ const finalizarPedido = async (cliente, observacao, produtos) => {
     .returning("*");
 
   for (const produto of produtos) {
-    await transacao("pedidos_produtos").insert({
+    await transacao("pedido_produtos").insert({
       pedido_id: pedidoCriado[0].id,
       produto_id: produto.produto_id,
       quantidade_produto: produto.quantidade_produto,
@@ -78,7 +78,7 @@ const finalizarPedido = async (cliente, observacao, produtos) => {
     );
   }
 
-  const somaProdutos = await transacao("pedidos_produtos")
+  const somaProdutos = await transacao("pedido_produtos")
     .sum("valor_produto as valor_total")
     .where({ pedido_id: pedidoCriado[0].id })
     .first();
@@ -112,7 +112,7 @@ const listarPedidosService = async (cliente_id) => {
       "pp.valor_produto",
       "pp.produto_id"
     )
-    .leftJoin("pedidos_produtos as pp", "pedidos.id", "pp.pedido_id");
+    .leftJoin("pedido_produtos as pp", "pedidos.id", "pp.pedido_id");
 
   if (cliente_id) {
     query.where("pedidos.cliente_id", cliente_id);
@@ -121,10 +121,8 @@ const listarPedidosService = async (cliente_id) => {
   return await query;
 };
 
-
-
 module.exports = {
   validarPedido,
   finalizarPedido,
-  listarPedidosService,
+  listarPedidosService
 };
