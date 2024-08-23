@@ -1,0 +1,738 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API PDV - Equipe Ansiedade Code",
+    "version": "1.0.0",
+    "description": "API desenvolvida como projeto final do curso DDS Backend T16 da Cubos Academy"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "API de Teste"
+    },
+    {
+      "url": "https://desafio-backend-final-dds-t16-gjyx.onrender.com",
+      "description": "Deploy Produção"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Login"
+    },
+    {
+      "name": "Usuários",
+      "description": "Todos os endpoints de usuários."
+    },
+    {
+      "name": "Clientes",
+      "description": "Todos os endpoints de clientes."
+    },
+    {
+      "name": "Produtos",
+      "description": "Todos os endpoints de produtos."
+    },
+    {
+      "name": "Categorias"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "Endpoint para realizar login do usuário.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "senha": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuario": {
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Endpoint para cadastrar usuário.",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "example": "any"
+                  },
+                  "email": {
+                    "example": "any"
+                  },
+                  "senha": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Endpoint para detalhar usuário logado.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Endpoint para alterar dados do usuário.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "example": "any"
+                  },
+                  "email": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categoria": {
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Endpoint para listar todas as categorias.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/usuario/redefinir": {
+      "patch": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Endpoint para redefinir senha do usuário.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "senha_antiga": {
+                    "example": "any"
+                  },
+                  "senha_nova": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cliente": {
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Endpoint para cadastrar cliente.",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cliente"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Endpoint para listar todos os clientes.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/cliente/{id}": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Endpoint para detalhar cliente especificado.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Id do cliente"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Endpoint para alterar dados de cliente especificado.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Id do cliente"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cliente"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/produto": {
+      "post": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Endpoint para cadastrar produto.",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Produto"
+              },
+              "examples": {
+                "ExemploCadastro": {
+                  "summary": "Exemplo Cadastro Completo",
+                  "value": {
+                    "descricao": "EA Sports FC 24 - PlayStation 5",
+                    "quantidade_estoque": 12,
+                    "valor": 15460,
+                    "categoria_id": 9
+                  }
+                },
+                "ExemploCadastroErroCategoria": {
+                  "summary": "Exemplo Cadastro Erro Categoria",
+                  "value": {
+                    "descricao": "EA Sports FC 24 - Xbox Series X",
+                    "quantidade_estoque": 19,
+                    "valor": 15460,
+                    "categoria_id": 990
+                  }
+                },
+                "ExemploComErroCampoObrigatorio": {
+                  "summary": "Exemplo Cadastro Erro Campo Obrig.",
+                  "value": {
+                    "descricao": "EA Sports FC 24 - Xbox Series X",
+                    "quantidade_estoque": 19,
+                    "categoria_id": 9
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Endpoint para listar todos os produtos.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "categoria_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Id da categoria."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/produto/{id}": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Endpoint para detalhar produto especificado.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Id do produto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Endpoint para alterar dados de produto especificado.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Id do produto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Produto"
+              },
+              "examples": {
+                "ExemploUpdate": {
+                  "summary": "Exemplo Update Completo",
+                  "value": {
+                    "descricao": "EA Sports FC 24 - PlayStation 5",
+                    "quantidade_estoque": 10,
+                    "valor": 15460,
+                    "categoria_id": 9
+                  }
+                },
+                "ExemploUpdateErroCategoria": {
+                  "summary": "Exemplo Update Erro Categoria",
+                  "value": {
+                    "descricao": "EA Sports FC 24 - Xbox Series X",
+                    "quantidade_estoque": 10,
+                    "valor": 15460,
+                    "categoria_id": 990
+                  }
+                },
+                "ExemploComErroCampoObrigatorio": {
+                  "summary": "Exemplo Update Erro Campo Obrig.",
+                  "value": {
+                    "descricao": "EA Sports FC 24 - Xbox Series X",
+                    "quantidade_estoque": 10,
+                    "categoria_id": 9
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Endpoint para excluir produto.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Id do produto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Produto": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string"
+          },
+          "quantidade_estoque": {
+            "type": "integer"
+          },
+          "valor": {
+            "type": "integer"
+          },
+          "categoria_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "descricao",
+          "quantidade_estoque",
+          "valor",
+          "categoria_id"
+        ]
+      },
+      "Cliente": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Malaquias de Jesus Santos"
+          },
+          "email": {
+            "type": "string",
+            "example": "obinakiller@gmail.com"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "136.015.055-25"
+          },
+          "cep": {
+            "type": "string"
+          },
+          "rua": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "bairro": {
+            "type": "string"
+          },
+          "cidade": {
+            "type": "string"
+          },
+          "estado": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nome",
+          "email",
+          "cpf"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

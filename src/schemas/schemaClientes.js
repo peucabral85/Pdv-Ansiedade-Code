@@ -31,8 +31,8 @@ const schemaCliente = joi.object({
     cep: joi.string().allow(null).optional().messages({
         'string.pattern.base': 'O CEP foi informado num formato inválido.',
         'string.base': 'O campo CEP deve ser uma string.'
-    }).custom((value, helpers) => {
-        const cepSemFormatacao = value.replace(/\D/g, '');
+    }).custom((cep, helpers) => {
+        const cepSemFormatacao = cep.replace(/\D/g, '');
         if (cepSemFormatacao.length !== 8) {
             return helpers.error('string.pattern.base');
         }

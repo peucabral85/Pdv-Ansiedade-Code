@@ -1,6 +1,6 @@
 const knex = require('../connections/conexao');
 
-const insertCliente = async (nome, email, cpf, cep, rua, numero, bairro, cidade, estado) => {
+const cadastrarClienteService = async (nome, email, cpf, cep, rua, numero, bairro, cidade, estado) => {
     const cliente = await knex('clientes').insert({
         nome,
         email,
@@ -16,7 +16,7 @@ const insertCliente = async (nome, email, cpf, cep, rua, numero, bairro, cidade,
     return cliente[0];
 }
 
-const updateCliente = async (nome, email, cpf, cep, rua, numero, bairro, cidade, estado, id) => {
+const alterarClienteService = async (nome, email, cpf, cep, rua, numero, bairro, cidade, estado, id) => {
     await knex('clientes').update({
         nome,
         email,
@@ -30,13 +30,13 @@ const updateCliente = async (nome, email, cpf, cep, rua, numero, bairro, cidade,
     }).where({ id });
 }
 
-const listaClientes = async () => {
+const listarClientesService = async () => {
     const clientes = await knex('clientes').orderBy('id');
 
     return clientes;
 }
 
-const selectClienteUnico = async (id) => {
+const obterCliente = async (id) => {
     const cliente = await knex('clientes').where({ id }).first();
 
     return cliente;
@@ -55,10 +55,10 @@ const verificarCpfExistenteCliente = async (cpf) => {
 }
 
 module.exports = {
-    insertCliente,
-    updateCliente,
-    listaClientes,
-    selectClienteUnico,
+    cadastrarClienteService,
+    alterarClienteService,
+    listarClientesService,
+    obterCliente,
     verificarCpfExistenteCliente,
     verificarEmailExistenteCliente
 }

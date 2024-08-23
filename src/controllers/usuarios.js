@@ -5,9 +5,9 @@ const compiladorHtml = require("../utils/compiladorHtml");
 const { format } = require('date-fns-tz');
 const {
     verificarEmailExistente,
-    updateSenhaUsuario,
-    insertUsuario,
-    updateUsuario,
+    redefinirSenhaUsuarioService,
+    cadastrarUsuarioService,
+    atualizarUsuarioService
 } = require("../services/usuarios");
 
 const cadastrarUsuario = async (req, res) => {
@@ -22,7 +22,7 @@ const cadastrarUsuario = async (req, res) => {
 
         const senhaCriptografada = await bcrypt.hash(senha, 10);
 
-        const usuarioCadastrado = await insertUsuario(nome, email, senhaCriptografada);
+        const usuarioCadastrado = await cadastrarUsuarioService(nome, email, senhaCriptografada);
 
         return res.status(201).json(usuarioCadastrado);
 
@@ -81,7 +81,7 @@ const redefinirSenhaUsuario = async (req, res) => {
 
         const senhaCriptografada = await bcrypt.hash(senha_nova, 10);
 
-        await updateSenhaUsuario(usuarioValidado.id, senhaCriptografada);
+        await redefinirSenhaUsuarioService(usuarioValidado.id, senhaCriptografada);
 
         const avisoSenhaEmail = await compiladorHtml("./src/templates/emailSenhaRedefinida.html",
             {
@@ -122,7 +122,7 @@ const atualizarUsuario = async (req, res) => {
             return res.status(409).json({ mensagem: "O e-mail informado já está sendo utilizado por outro usuário." });
         }
 
-        await updateUsuario(nome, email, usuario.id);
+        await atualizarUsuarioService(nome, email, usuario.id);
 
         return res.status(200).json({ mensagem: "Usuário atualizado com sucesso." });
 
