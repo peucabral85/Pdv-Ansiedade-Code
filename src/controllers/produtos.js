@@ -109,8 +109,10 @@ const excluirProduto = async (req, res) => {
 
         await excluirProdutoService(id);
 
-        const pathImagemProdutoDeletado = produtoExistente.imagem_url.slice(84);
-        await deletarImagem(pathImagemProdutoDeletado);
+        if (produtoExistente.imagem_url !== null && produtoExistente.imagem_url !== "") {
+            const pathImagemProdutoDeletado = produtoExistente.imagem_url.slice(84);
+            await deletarImagem(pathImagemProdutoDeletado);
+        }
 
         return res.status(200).json({ mensagem: "Produto excluído com sucesso." });
 
