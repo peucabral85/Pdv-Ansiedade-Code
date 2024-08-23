@@ -109,9 +109,8 @@ const excluirProduto = async (req, res) => {
 
         await excluirProdutoService(id);
 
-        if (produtoExistente.imagem_url !== null && produtoExistente.imagem_url !== "") {
-            const pathImagemProdutoDeletado = produtoExistente.imagem_url.slice(84);
-            await deletarImagem(pathImagemProdutoDeletado);
+        if (produtoExistente.imagem_url) {
+            await deletarImagem(produtoExistente.imagem_url);
         }
 
         return res.status(200).json({ mensagem: "Produto excluído com sucesso." });
@@ -123,6 +122,11 @@ const excluirProduto = async (req, res) => {
 
 const adicionarImagemProduto = async (req, res) => {
     const { id } = req.params;
+    const { imagem } = req.body;
+
+    if (typeof imagem === 'undefined' && !req.file) {
+        return res.status(400).json({ mensagem: "A propriedade imagem deve ser fornecida na requisição." });
+    }
 
     try {
         const produtoExistente = await obterProdutoPorId(id);
@@ -131,45 +135,47 @@ const adicionarImagemProduto = async (req, res) => {
             return res.status(404).json({ mensagem: "Produto não encontrado." });
         }
 
-        if (!req.file) {
-            if (!produtoExistente.imagem_url) {
-                return res.status(401).json({ mensagem: "Produto não contém imagem." });
-            }
+        const imagemAtual = produtoExistente.imagem_url;
 
-            const pathImagemProdutoDeletada = produtoExistente.imagem_url.slice(84);
-            await deletarImagem(pathImagemProdutoDeletada);
+        if (!req.file && !imagemAtual) {
+            return res.status(200).json({
+                mensagem: "Imagem do produto já atualizada.",
+                imagem_url: imagemAtual
+            });
+        }
 
+        if (!req.file && imagemAtual) {
+            await deletarImagem(imagemAtual);
             await atualizarImagemService(id, null);
 
-            return res.status(200).json({ mensagem: "Imagem excluida com sucesso" });
+            return res.status(200).json({
+                mensagem: "Imagem removida com sucesso.",
+                imagem_url: null
+            });
         }
 
-        const { originalname, buffer, mimetype } = req.file
+        if (req.file) {
+            const { originalname, buffer, mimetype } = req.file;
 
-        if (produtoExistente.imagem_url !== "" && produtoExistente.imagem_url !== null) {
-            const pathImagemProdutoDeletada = produtoExistente.imagem_url.slice(84);
-            await deletarImagem(pathImagemProdutoDeletada);
+            if (imagemAtual) {
+                await deletarImagem(imagemAtual);
+            }
+
+            const nomeArquivo = `${randomUUID()}${path.extname(originalname)}`;
+            const arquivo = await enviarImagem(`imagens/${nomeArquivo}`, buffer, mimetype);
+
+            await atualizarImagemService(id, arquivo.path);
+
+            return res.status(201).json({
+                mensagem: "Imagem atualizada com sucesso.",
+                imagem_url: arquivo.url
+            });
         }
-
-        const nomeArquivo = `${randomUUID()}${path.extname(originalname)}`;
-        await enviarImagem(
-            `imagens/${nomeArquivo}`,
-            buffer,
-            mimetype
-        )
-        const url = `${process.env.STORAGE_BASEURL}/${process.env.STORAGE_BUCKET}/imagens/${nomeArquivo}`;
-
-        await atualizarImagemService(id, url);
-
-        return res.status(201).json({
-            path: `imagens/${nomeArquivo}`,
-            url
-        })
 
     } catch (error) {
         return res.status(500).json({ mensagem: "Erro interno do servidor." });
     }
-}
+};
 
 module.exports = {
     cadastrarProdutos,
