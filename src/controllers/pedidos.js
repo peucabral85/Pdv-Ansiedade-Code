@@ -73,6 +73,11 @@ const listarPedidos = async (req, res) => {
   const { cliente_id } = req.query;
 
   try {
+
+    if (cliente_id && !(await obterCliente(cliente_id))) {
+      return res.status(400).json({ mensagem: "Cliente não encontrado." });
+    }
+
     const pedidos = await listarPedidosService(cliente_id);
 
     const pedidosFormatados = pedidos.reduce((acc, item) => {
