@@ -109,7 +109,7 @@ const excluirProduto = async (req, res) => {
 
         await excluirProdutoService(id);
 
-        const pathImagemProdutoDeletado = produtoExistente.imagem_url.slice(70);
+        const pathImagemProdutoDeletado = produtoExistente.imagem_url.slice(84);
         await deletarImagem(pathImagemProdutoDeletado);
 
         return res.status(200).json({ mensagem: "Produto excluído com sucesso." });
@@ -134,7 +134,7 @@ const adicionarImagemProduto = async (req, res) => {
                 return res.status(401).json({ mensagem: "Produto não contém imagem." });
             }
 
-            const pathImagemProdutoDeletada = produtoExistente.imagem_url.slice(70);
+            const pathImagemProdutoDeletada = produtoExistente.imagem_url.slice(84);
             await deletarImagem(pathImagemProdutoDeletada);
 
             await atualizarImagemService(id, null);
@@ -145,12 +145,12 @@ const adicionarImagemProduto = async (req, res) => {
         const { originalname, buffer, mimetype } = req.file
 
         if (produtoExistente.imagem_url !== "" && produtoExistente.imagem_url !== null) {
-            const pathImagemProdutoDeletada = produtoExistente.imagem_url.slice(70);
+            const pathImagemProdutoDeletada = produtoExistente.imagem_url.slice(84);
             await deletarImagem(pathImagemProdutoDeletada);
         }
 
-        const nomeArquivo = `${randomUUID()}${path.extname(originalname)}`
-        const imagem = await enviarImagem(
+        const nomeArquivo = `${randomUUID()}${path.extname(originalname)}`;
+        await enviarImagem(
             `imagens/${nomeArquivo}`,
             buffer,
             mimetype
