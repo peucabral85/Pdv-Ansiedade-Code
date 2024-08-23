@@ -61,7 +61,7 @@ const atualizarImagemService = async (id, imagem_url) => {
 }
 
 const enviarImagem = async (path, buffer, mimeType) => {
-    const arquivo = await clients3.send(
+    await clients3.send(
         new PutObjectCommand({
             Bucket: process.env.STORAGE_BUCKET,
             Key: path,
@@ -69,7 +69,11 @@ const enviarImagem = async (path, buffer, mimeType) => {
             ContentType: mimeType,
         })
     );
-    return arquivo;
+
+    return {
+        path: path,
+        url: `${process.env.STORAGE_BASEURL}/${process.env.STORAGE_BUCKET}/${path}`
+    }
 }
 
 const deletarImagem = async (path) => {
