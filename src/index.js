@@ -7,7 +7,7 @@ const rotasPedidos = require('./routes/rotasPedidos');
 const rotasProdutos = require('./routes/rotasProdutos');
 const rotasUsuarios = require('./routes/rotasUsuarios');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocs = require('./docs/swagger_output.json');
+const swaggerDocs = require('./docs/swagger');
 
 const app = express();
 
