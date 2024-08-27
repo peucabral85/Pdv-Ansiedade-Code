@@ -10,7 +10,7 @@ const cadastrarPedidos = async (req, res) => {
     const clienteVerificado = await obterCliente(cliente_id);
 
     if (!clienteVerificado) {
-      return res.status(400).json({ mensagem: "Cliente não encontrado." });
+      return res.status(404).json({ mensagem: "Cliente não encontrado." });
     }
 
     const pedidoValidado = await validarPedido(pedido_produtos);
@@ -58,10 +58,9 @@ const cadastrarPedidos = async (req, res) => {
     return res.status(201).json(pedido);
 
   } catch (error) {
-    if (
-      error.tipoErro === "PRODUTO_NAO_ENCONTRADO" ||
-      error.tipoErro === "ESTOQUE_INSUFICIENTE"
-    ) {
+    if (error.tipoErro === "PRODUTO_NAO_ENCONTRADO") {
+      return res.status(404).json({ mensagem: `${error.message}` });
+    } else if (error.tipoErro === "ESTOQUE_INSUFICIENTE") {
       return res.status(400).json({ mensagem: `${error.message}` });
     }
 
@@ -75,7 +74,7 @@ const listarPedidos = async (req, res) => {
   try {
 
     if (cliente_id && !(await obterCliente(cliente_id))) {
-      return res.status(400).json({ mensagem: "Cliente não encontrado." });
+      return res.status(404).json({ mensagem: "Cliente não encontrado." });
     }
 
     const pedidos = await listarPedidosService(cliente_id);

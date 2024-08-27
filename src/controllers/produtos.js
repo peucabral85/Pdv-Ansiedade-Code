@@ -19,7 +19,7 @@ const cadastrarProdutos = async (req, res) => {
         const categoriaEncontrada = await verificarCategoriaService(categoria_id);
 
         if (!categoriaEncontrada) {
-            return res.status(400).json({ mensagem: "Categoria informada não encontrada." });
+            return res.status(404).json({ mensagem: "Categoria informada não encontrada." });
         }
 
         const produtoCadastrado = await cadastrarProdutoService(descricao, quantidade_estoque, valor, categoria_id);
@@ -36,7 +36,7 @@ const listarProdutos = async (req, res) => {
 
     try {
         if (categoria_id && !(await verificarCategoriaService(categoria_id))) {
-            return res.status(400).json({ mensagem: "A categoria informada não foi encontrada" });
+            return res.status(404).json({ mensagem: "A categoria informada não foi encontrada" });
         }
 
         const produtosListados = await obterListaProdutos(categoria_id);
@@ -79,7 +79,7 @@ const atualizarProduto = async (req, res) => {
         const categoriaEncontrada = await verificarCategoriaService(categoria_id);
 
         if (!categoriaEncontrada) {
-            return res.status(400).json({ mensagem: "Categoria informada não encontrada." });
+            return res.status(404).json({ mensagem: "Categoria informada não encontrada." });
         }
 
         await atualizarProdutoService(descricao, quantidade_estoque, valor, categoria_id, id);
@@ -104,7 +104,7 @@ const excluirProduto = async (req, res) => {
         const existeProdutoPedido = await verificarSeExistePedidoParaProduto(id);
 
         if (existeProdutoPedido) {
-            return res.status(404).json({ mensagem: "Não é possível excluir o produto, pois ele está vinculado a um ou mais pedidos." });
+            return res.status(400).json({ mensagem: "Não é possível excluir o produto, pois ele está vinculado a um ou mais pedidos." });
         }
 
         await excluirProdutoService(id);
