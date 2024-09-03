@@ -13,7 +13,7 @@ const swaggerDefinition = {
             description: 'API de Teste',
         },
         {
-            url: 'https://desafio-backend-final-dds-t16-gjyx.onrender.com',
+            url: 'https://pdv-ansiedade-code.onrender.com',
             description: 'Deploy Produção',
         },
     ],
