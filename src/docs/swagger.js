@@ -3,7 +3,7 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerDefinition = {
     openapi: '3.1.0',
     info: {
-        title: 'API PDV - Equipe Ansiedade Code',
+        title: 'API PDV - Ansiedade Code',
         version: '1.0.0',
         description: 'API desenvolvida como projeto final do curso DDS Backend T16 da Cubos Academy',
     },
